@@ -1,0 +1,7 @@
+precizie(ex1): 
+	1+u==1 (false)
+	u=u/10 => 1+u==1(true)
+
+ex2:
+	Horner
+
