@@ -132,23 +132,23 @@ int main(){
 		t1=clock();
 		P_err[0]+=abs(actual_sin-P1(x,xpow2,xpow3));
 		t2=clock();
-		p1_t=((float)(t2-t1)/1000000.0F) * 1000;
+		p1_t+=((float)(t2-t1)/1000000.0F) * 1000;
 		t1=clock();
 		P_err[1]+=abs(actual_sin-P2(x,xpow2,xpow3));
 		t2=clock();
-		p2_t=((float)(t2-t1)/1000000.0F) * 1000;
+		p2_t+=((float)(t2-t1)/1000000.0F) * 1000;
 		t1=clock();
 		P_err[2]+=abs(actual_sin-P3(x,xpow2,xpow3));
 		t2=clock();
-		p3_t=((float)(t2-t1)/1000000.0F) * 1000;
+		p3_t+=((float)(t2-t1)/1000000.0F) * 1000;
 		t1=clock();
 		P_err[3]+=abs(actual_sin-P4(x,xpow2,xpow3));
 		t2=clock();
-		p4_t=((float)(t2-t1)/1000000.0F) * 1000;
+		p4_t+=((float)(t2-t1)/1000000.0F) * 1000;
 		t1=clock();
 		P_err[4]+=abs(actual_sin-P5(x,xpow2,xpow3));
 		t2=clock();
-		p5_t=((float)(t2-t1)/1000000.0F) * 1000;
+		p5_t+=((float)(t2-t1)/1000000.0F) * 1000;
 			}
 	for (int i=0;i<5;++i){
 		P_err[i]/=no;
@@ -183,6 +183,6 @@ int main(){
 	}
 		}
 	}
-	printf("For %d random numbers:\nP1 time: %0.14f ms\nP2 time: %0.14f ms\nP3 time: %0.14f ms\nP4 time: %0.14f ms\nP5 time: %0.14f ms\n",no,p1_t,p2_t,p3_t,p4_t,p5_t);
+	printf("For %d random numbers:\nP1 time: %0.16f ms\nP2 time: %0.16f ms\nP3 time: %0.16f ms\nP4 time: %0.16f ms\nP5 time: %0.16f ms\n",no,p1_t,p2_t,p3_t,p4_t,p5_t);
 	return 0;
 }
