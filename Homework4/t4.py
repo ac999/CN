@@ -6,7 +6,6 @@ from scipy.sparse.linalg import spsolve
 from numpy.linalg import solve, norm
 
 def sparseMatrixStack(n,A):
-	# A=sp.csr_matrix((v,(r,c)), shape=(n, n))
 	indptr=A.indptr
 	indices=A.indices
 	data=A.data
@@ -21,20 +20,16 @@ def sparseMatrixStack(n,A):
 		row=[]
 		for j in range(indptr[i],indptr[i+1]):
 			row.append((data[j],indices[j]))
-		# print(row)
 		storage.append(row)
 
 	return storage
 
 def sparseMatrixNullDiag(n,A):
-	# A=sp.csr_matrix((v,(r,c)), shape=(n,n))
-	# di = np.diag_indices(n)
-	# return A[di]
-	print (A)
-	print (A.diagonal())
+	# returns true if A's diagonal is null (filled with 0)
 	return (not False in (np.equal(A.diagonal(),np.zeros(n))))
 
-def aproxSolution(n,A,omega):
+def aproxSolution(n,A,b,omega):
+	# to be done
 	return None
 
 def readFile(filename):
