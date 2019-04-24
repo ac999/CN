@@ -5,14 +5,14 @@ import scipy.sparse as sp
 from scipy.sparse.linalg import spsolve
 from numpy.linalg import solve, norm
 
+eps=np.finfo(float).eps
+kMax=10000
+tenAt8=10**8
+
 def sparseMatrixStack(n,A):
 	indptr=A.indptr
 	indices=A.indices
 	data=A.data
-
-	print(indptr)
-	print(indices)
-	print(data)
 
 	storage=[]
 
@@ -26,11 +26,43 @@ def sparseMatrixStack(n,A):
 
 def sparseMatrixNullDiag(n,A):
 	# returns true if A's diagonal is null (filled with 0)
+	# return (np.equal(A.diagonal(),np.zeros(n)))
 	return (not False in (np.equal(A.diagonal(),np.zeros(n))))
 
-def aproxSolution(n,A,b,omega):
-	# to be done
-	return None
+def SOA(n,AStack,b,omega):
+	if (omega <= 0 or omega >= 2):
+		print("Omega must be in (0,2); Omega is {0}".format(omega))
+		exit(-1)
+
+	x = np.zeros(n)
+	k=0
+	sigma=0
+	
+	while (k <= kMax):
+		for i in range(n):
+			sigma=0
+			for value_column in AStack[i]:
+				j=value_column[1]
+				if (i!=j):
+					sigma+=value_column[0]*x[j]
+						
+			for value_column in AStack[i]:
+				if (value_column[1]==i):
+					# x[i]+=omega*(float((b[i]-sigma)/value_column[0])-x[i])
+					x[i]+=float(omega/value_column[0])*(b[i]-sigma)
+					break
+		k+=1
+
+		if (np.linalg.norm(x-x) < eps or np.linalg.norm(x-x) > tenAt8):
+			return (x,k)
+			break
+		
+		print ("Step: {0}".format(k))
+		print (x)
+		print(np.linalg.norm(x-x))
+		# print(np.linalg.norm(x-sigma, np.inf))
+		
+	return (x,k)
 
 def readFile(filename):
 
@@ -65,8 +97,11 @@ def readFile(filename):
 	return n, sp.csr_matrix((v,(r,c)), shape=(n,n)), np.array(b)
 
 if __name__ == '__main__':
-	# n,v,c,r,b=readFile("m_rar_2019_1.txt")
-	n,A,b=readFile("test.txt")
+	n,A,b=readFile("m_rar_2019_2.txt")
+	# n,A,b=readFile("test.txt")
+	# print (sparseMatrixStack(n,A))
 	# print (sparseMatrixStack(n,A))
 	# print (sparseMatrixNullDiag(n,A))
-
+	print (np.linalg.norm(SOA(n,sparseMatrixStack(n,A),b,0.8)[0] - b, np.inf))
+	print (np.linalg.norm(SOA(n,sparseMatrixStack(n,A),b,1)[0] - b, np.inf))
+	print (np.linalg.norm(SOA(n,sparseMatrixStack(n,A),b,1.2)[0] - b, np.inf))
